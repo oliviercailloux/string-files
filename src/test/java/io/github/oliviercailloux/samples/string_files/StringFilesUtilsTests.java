@@ -18,14 +18,6 @@ import com.google.common.jimfs.Jimfs;
 class StringFilesUtilsTests {
 
 	@Test
-	void testUpToDate() throws Exception {
-		final FilteringLoader loader = new FilteringLoader(ImmutableSet.of(File.class));
-		final StringFilesUtils instance = (StringFilesUtils) loader.loadClass(MyStringFilesUtils.class.getName())
-				.asSubclass(StringFilesUtils.class).getDeclaredMethod("newInstance").invoke(null);
-		instance.setReferenceFolder(".");
-	}
-
-	@Test
 	void testEquivalentFolders() throws Exception {
 		final MyStringFilesUtils utils = new MyStringFilesUtils();
 		utils.setReferenceFolder(Path.of("."));
