@@ -3,7 +3,6 @@ package io.github.oliviercailloux.samples.string_files;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.io.File;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +10,6 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 
@@ -19,14 +17,14 @@ class StringFilesUtilsTests {
 
 	@Test
 	void testEquivalentFolders() throws Exception {
-		final MyStringFilesUtils utils = new MyStringFilesUtils();
+		final MyStringFilesUtils utils = MyStringFilesUtils.newInstance();
 		utils.setReferenceFolder(Path.of("."));
 		assertFalse(utils.setReferenceFolder(Path.of("")));
 	}
 
 	@Test
 	void testReadLines() throws Exception {
-		final MyStringFilesUtils utils = new MyStringFilesUtils();
+		final MyStringFilesUtils utils = MyStringFilesUtils.newInstance();
 		try (FileSystem inMemoryFs = Jimfs.newFileSystem(Configuration.unix())) {
 			Files.writeString(inMemoryFs.getPath("ploum.txt"), "H\u00E9 !\nBonjour.\n \t\n\r");
 
@@ -48,7 +46,7 @@ class StringFilesUtilsTests {
 	 */
 	@Test
 	void testRelativeTo() throws Exception {
-		final MyStringFilesUtils utils = new MyStringFilesUtils();
+		final MyStringFilesUtils utils = MyStringFilesUtils.newInstance();
 
 		utils.setReferenceFolder(Path.of("a", "b"));
 		assertEquals("c", utils.getPathRelativeToReference("a/b/c"));
