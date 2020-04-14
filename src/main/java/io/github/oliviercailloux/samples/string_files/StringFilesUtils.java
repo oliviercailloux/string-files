@@ -51,8 +51,9 @@ public interface StringFilesUtils {
 	 * @return <code>true</code> iff the reference folder has changed as a result of
 	 *         this call (if the new reference folder is simply another name for the
 	 *         old reference, it does not count as a change).
+	 * @throws IOException if an I/O error occurs
 	 */
-	public boolean setReferenceFolder(Path referenceFolder);
+	public boolean setReferenceFolder(Path referenceFolder) throws IOException;
 
 	/**
 	 * Returns the absolute path corresponding to the path given as argument,
