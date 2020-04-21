@@ -29,25 +29,25 @@ public class MyStringFilesUtils implements StringFilesUtils {
 		return !Files.isSameFile(this.referenceFolder, referenceFolder);
 	}
 
-	private Path asRelativePath(String path) {
-		final Path asPath = Path.of(checkNotNull(path));
-		checkArgument(!asPath.isAbsolute());
+	private Path asPathRelativeToReference(String path) {
+		final Path asPath = referenceFolder.resolve(checkNotNull(path));
+		checkArgument(!Path.of(path).isAbsolute());
 		return asPath;
 	}
 
 	@Override
 	public String getAbsolutePath(String pathRelativeToReference) {
-		return referenceFolder.resolve(asRelativePath(pathRelativeToReference)).toAbsolutePath().toString();
+		return asPathRelativeToReference(pathRelativeToReference).toAbsolutePath().toString();
 	}
 
 	@Override
 	public ImmutableList<String> getContentUsingIso88591Charset(String pathRelativeToReference) throws IOException {
-		return ImmutableList.copyOf(Files.readAllLines(referenceFolder.resolve(asRelativePath(pathRelativeToReference)),
-				StandardCharsets.ISO_8859_1));
+		return ImmutableList.copyOf(
+				Files.readAllLines(asPathRelativeToReference(pathRelativeToReference), StandardCharsets.ISO_8859_1));
 	}
 
 	@Override
 	public String getPathRelativeToReference(String pathRelativeToCurrent) {
-		return referenceFolder.relativize(asRelativePath(pathRelativeToCurrent)).toString();
+		return referenceFolder.relativize(Path.of(checkNotNull(pathRelativeToCurrent))).toString();
 	}
 }
