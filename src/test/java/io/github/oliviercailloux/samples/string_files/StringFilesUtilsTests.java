@@ -3,6 +3,7 @@ package io.github.oliviercailloux.samples.string_files;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +27,8 @@ class StringFilesUtilsTests {
 	void testReadLines() throws Exception {
 		final MyStringFilesUtils utils = MyStringFilesUtils.newInstance();
 		try (FileSystem inMemoryFs = Jimfs.newFileSystem(Configuration.unix())) {
-			Files.writeString(inMemoryFs.getPath("ploum.txt"), "H\u00E9 !\nBonjour.\n \t\n\r");
+			Files.write(inMemoryFs.getPath("ploum.txt"),
+					"Hé !\nBonjour.\n \t\n\r".getBytes(StandardCharsets.ISO_8859_1));
 
 			utils.setReferenceFolder(inMemoryFs.getPath(""));
 			final ImmutableList<String> readContent = utils.getContentUsingIso88591Charset("ploum.txt");
