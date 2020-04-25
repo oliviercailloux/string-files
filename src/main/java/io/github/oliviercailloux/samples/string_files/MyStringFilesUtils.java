@@ -25,8 +25,9 @@ public class MyStringFilesUtils implements StringFilesUtils {
 	@Override
 	public boolean setReferenceFolder(Path referenceFolder) throws IOException {
 		checkNotNull(referenceFolder);
+		final Path oldRef = this.referenceFolder;
 		this.referenceFolder = referenceFolder;
-		return !Files.isSameFile(this.referenceFolder, referenceFolder);
+		return !oldRef.normalize().equals(referenceFolder.normalize());
 	}
 
 	private Path asPathRelativeToReference(String path) {
