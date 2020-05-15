@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
@@ -31,9 +32,13 @@ public class MyStringFilesUtils implements StringFilesUtils {
 	}
 
 	private Path asPathRelativeToReference(String path) {
-		final Path asPath = referenceFolder.resolve(checkNotNull(path));
+		/**
+		 * Slightly ambiguous what an absolute path means in terms of strings, here we
+		 * consider the case where the string is interpretable as a path using the
+		 * default file system; other equally valid interpretations exist.
+		 */
 		checkArgument(!Path.of(path).isAbsolute());
-		return asPath;
+		return referenceFolder.resolve(checkNotNull(path));
 	}
 
 	@Override
@@ -43,8 +48,9 @@ public class MyStringFilesUtils implements StringFilesUtils {
 
 	@Override
 	public ImmutableList<String> getContentUsingIso88591Charset(String pathRelativeToReference) throws IOException {
-		return ImmutableList.copyOf(
-				Files.readAllLines(asPathRelativeToReference(pathRelativeToReference), StandardCharsets.ISO_8859_1));
+		final List<String> allLines = Files.readAllLines(asPathRelativeToReference(pathRelativeToReference),
+				StandardCharsets.ISO_8859_1);
+		return ImmutableList.copyOf(allLines);
 	}
 
 	@Override
